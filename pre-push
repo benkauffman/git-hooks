@@ -1,0 +1,26 @@
+#!/bin/bash
+set local
+
+echo Running pre-push git hook script
+
+read -p "Repo push detected, would you like to update the code version? [y/n] " -n 1 -r < /dev/tty
+echo
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+    cd "$(dirname "$0")"
+
+    cd ../../
+
+    old_version=`cat version.txt`
+    python version.py 3
+    new_version=`cat version.txt`
+
+    git add --all
+    git commit -m "git hook pre-push auto update version from $old_version to $new_version"
+
+    echo You will need to push again without updating the version.
+    read done
+
+    exit 1 # push will not execute
+fi
+exit 0 # push will execute
