@@ -16,11 +16,13 @@ then
     new_version=`cat version.txt`
 
     git add --all
-    git commit -m "git hook pre-push auto update version from $old_version to $new_version"
+    git commit --no-verify -m "git hook pre-push auto update version from $old_version to $new_version"
+    git push --no-verify 
 
-    echo You will need to push again without updating the version.
+    echo "Completed version update from $old_version to $new_version"
+    echo "The initial push has been cancelled and replaced with a new push for version $new_version"
     read done
 
-    exit 1 # push will not execute
+    exit 1 # initial push will not execute
 fi
 exit 0 # push will execute
